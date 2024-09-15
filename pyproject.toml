@@ -1,13 +1,15 @@
 [tool.poetry]
 name = "mangadex-downloader"
 version = "0.1.0"
-description = ""
+description = "A Python package for downloading manga from MangaDex"
 authors = ["Jeffery Fang <Jefferyfang324@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
 
+[tool.poetry.scripts]
+mangadex-downloader = "mangadex_downloader.main:main"
 
 [build-system]
 requires = ["poetry-core"]
