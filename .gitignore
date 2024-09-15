@@ -1,0 +1,7 @@
+.pytest_cache
+__pycache__
+htmlcov
+.coverage
+*.egg-info
+build
+poetry.lock
