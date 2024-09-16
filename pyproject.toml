@@ -10,7 +10,6 @@ python = "^3.11"
 python-dotenv = "^1.0.1"
 aiohttp = {extras = ["speedups"], version = "^3.10.5"}
 datetime = "^5.5"
-windows-curses = "^2.3.3"
 
 [tool.poetry.scripts]
 mangadex-downloader = "mangadex_downloader.main:main"
@@ -18,6 +17,10 @@ mangadex-downloader = "mangadex_downloader.main:main"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
 coverage = "^7.6.1"
+
+
+[tool.poetry.group.windows.dependencies]
+windows-curses = "^2.3.3"
 
 [build-system]
 requires = ["poetry-core"]

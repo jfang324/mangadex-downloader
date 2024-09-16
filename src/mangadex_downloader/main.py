@@ -22,7 +22,7 @@ async def start(stdscr: curses) -> None:
     proccessed_manga_data: list[dict] = process_manga_data(manga_data)
 
     selected_manga_index: int = prompt_list_selection(
-        stdscr, proccessed_manga_data, 10, "Select manga"
+        stdscr, proccessed_manga_data, 20, "Select manga"
     )
 
     if selected_manga_index == -1:
