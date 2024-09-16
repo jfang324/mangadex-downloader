@@ -61,3 +61,51 @@ async def retrieve_chapters(manga_id: str) -> dict:
     except Exception as e:
         print(e)
         return None
+
+
+async def retrieve_download_resources(chapter_id: str) -> dict:
+    """
+    Query MangaDex API for download resources of the chapter with the given chapter_id
+
+    :param chapter_id: The id of the chapter to retrieve download resources for
+    :return: A dictionary containing information for download resources of the chapter
+    """
+    try:
+        url: str = f"{mangadex_resource_links_url}/{chapter_id}"
+
+        return await fetch_url(url)
+    except Exception as e:
+        print(e)
+        return None
+
+
+async def retrieve_image_data(image_url: str) -> bytes:
+    """
+    Retrives the image data from the given image url
+
+    :param image_url: The url of the image to retrieve data for
+    :return: The binary data of the image
+    """
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(image_url) as response:
+            if response.status == 200:
+                return await response.read()
+            else:
+                raise Exception(
+                    f"Failed to retrieve image data for {image_url}. Status code: {response.status}"
+                )
+
+
+async def retrieve_image_data_list(url_list: list[str]) -> list[bytes]:
+    """
+    Retrives the image data from the given image urls
+
+    :param image_links: The urls of the images to retrieve data for
+    :return: A list containing the binary data of the images
+    """
+
+    async with aiohttp.ClientSession() as session:
+        tasks = [retrieve_image_data(url) for url in url_list]
+
+    return await asyncio.gather(*tasks)

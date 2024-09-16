@@ -30,7 +30,7 @@ def process_manga_data(manga_data: dict) -> list[dict]:
     return processed_manga_data
 
 
-def process_chapters(chapter_data: dict) -> list[dict]:
+def process_chapter_data(chapter_data: dict) -> list[dict]:
     """
     Processes the chapter data dictionary to contain only the following fields:
     {
@@ -68,3 +68,22 @@ def process_chapters(chapter_data: dict) -> list[dict]:
     processed_chapter_data.sort(key=lambda x: float(x["chapter_number"]))
 
     return processed_chapter_data
+
+
+def process_download_resource_data(download_resources: dict) -> list[str]:
+    """
+    Processes the download resources data dictionary into a list of download urls
+
+    :param download_resources: The download resources data dictionary
+    :return: A list containing the download urls
+    """
+
+    download_urls: list[str] = []
+    base_url: str = download_resources["baseUrl"]
+    hash: str = download_resources["chapter"]["hash"]
+    quality: str = "data"
+
+    for element in download_resources["chapter"][quality]:
+        download_urls.append(f"{base_url}/{quality}/{hash}/{element}")
+
+    return download_urls

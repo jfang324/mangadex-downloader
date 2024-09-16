@@ -3,10 +3,10 @@ import curses
 from .api_access_service import *
 from .data_processing_service import *
 from .user_interface_service import *
+from .file_access_services import *
 
 
 async def start(stdscr: curses) -> None:
-    cursor_index: int = 0
     curses.curs_set(0)
     curses.start_color()
     curses.noecho()
@@ -31,7 +31,7 @@ async def start(stdscr: curses) -> None:
     chapter_data: dict = await retrieve_chapters(
         proccessed_manga_data[int(selected_manga_index)]["id"]
     )
-    proccessed_chapter_data: list[dict] = process_chapters(chapter_data)
+    proccessed_chapter_data: list[dict] = process_chapter_data(chapter_data)
 
     selected_chapter_index: int = prompt_list_selection(
         stdscr, proccessed_chapter_data, 20, "Select chapter"
@@ -40,9 +40,15 @@ async def start(stdscr: curses) -> None:
     if selected_chapter_index == -1:
         return
 
-    print(query)
-    print(selected_manga_index)
-    print(selected_chapter_index)
+    download_resources: dict = await retrieve_download_resources(
+        proccessed_chapter_data[int(selected_chapter_index)]["id"]
+    )
+    download_links: list[str] = process_download_resource_data(download_resources)
+    image_data_list: list[bytes] = await retrieve_image_data_list(download_links)
+    generate_PDF(
+        image_data_list,
+        f'{proccessed_manga_data[int(selected_manga_index)]["title"]} [{proccessed_chapter_data[int(selected_chapter_index)]["chapter_number"]}]',
+    )
 
 
 def curses_main(stdscr: curses) -> None:
