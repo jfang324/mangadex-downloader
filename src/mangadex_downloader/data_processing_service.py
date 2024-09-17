@@ -1,13 +1,9 @@
-import datetime
-
-
 def process_manga_data(manga_data: dict) -> list[dict]:
     """
-    Processes the manga data dictionary to contain only the following fields:
+    Processes the manga_data dictionary to contain only the following fields:
     {
         title: title of the manga,
-        id: mangaID for the API,
-        updated_at: date of last update,
+        id: mangaID for the API
     }
 
     :param manga_info: The manga info dictionary
@@ -32,10 +28,11 @@ def process_manga_data(manga_data: dict) -> list[dict]:
 
 def process_chapter_data(chapter_data: dict) -> list[dict]:
     """
-    Processes the chapter data dictionary to contain only the following fields:
+    Processes the chapter_data dictionary to contain only the following fields:
     {
         title: title of the chapter,
         id: chapterID for the API,
+        chapter_number: chapter number
     }
 
     :param chapter_data: The chapter data dictionary
@@ -72,7 +69,7 @@ def process_chapter_data(chapter_data: dict) -> list[dict]:
 
 def process_download_resource_data(download_resources: dict) -> list[str]:
     """
-    Processes the download resources data dictionary into a list of download urls
+    Processes the download_resources dictionary into a list of download urls
 
     :param download_resources: The download resources data dictionary
     :return: A list containing the download urls

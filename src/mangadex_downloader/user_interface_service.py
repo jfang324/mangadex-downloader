@@ -3,7 +3,7 @@ import curses
 
 def prompt_user_input(stdscr: curses, message: str) -> str:
     """
-    Prompts the user to enter a string
+    Prompts the user to enter a string and returns the string entered by the user
 
     :param stdscr: The curses object
     :param message: The message to display to the user
@@ -16,7 +16,6 @@ def prompt_user_input(stdscr: curses, message: str) -> str:
         stdscr.clear()
         stdscr.addstr(0, 0, f"{message}: ", curses.color_pair(1))
         stdscr.addstr(f"{user_input}")
-        stdscr.refresh()
 
         key: str = stdscr.getch()
         if key == ord("\n"):
@@ -38,10 +37,10 @@ def prompt_list_selection(
     stdscr: curses, result_list: list[dict], page_size: int, title: str
 ) -> int:
     """
-    Displays the manga list to the user and prompt them to select a manga
+    Displays the result list to the user and prompt them to select an item
 
     :param stdscr: The curses object
-    :param manga_list: The list of manga to display
+    :param result_list: The list of items to display
     :param page_size: The number of results to display per page
     :param title: The title at the top of the list
     :return: The index of the selected item
@@ -57,14 +56,25 @@ def prompt_list_selection(
         for i in range(page_start, page_end):
             if i == current_index:
                 stdscr.addstr(i - page_start + 1, 0, "> ", curses.color_pair(2))
-                stdscr.addstr(
-                    f'{i + 1} {result_list[i]["title"]}',
-                    curses.A_REVERSE,
-                )
+                if "chapter_number" in result_list[i]:
+                    stdscr.addstr(
+                        f'{result_list[i]["chapter_number"]} {result_list[i]["title"]}',
+                        curses.A_REVERSE,
+                    )
+                else:
+                    stdscr.addstr(
+                        f' {result_list[i]["title"]}',
+                        curses.A_REVERSE,
+                    )
             else:
                 stdscr.addstr(i - page_start + 1, 0, " ", curses.A_REVERSE)
                 stdscr.addstr(" ")
-                stdscr.addstr(f'{i + 1} {result_list[i]["title"]}')
+                if "chapter_number" in result_list[i]:
+                    stdscr.addstr(
+                        f'{result_list[i]["chapter_number"]} {result_list[i]["title"]}',
+                    )
+                else:
+                    stdscr.addstr(f' {result_list[i]["title"]}')
 
         stdscr.addstr(
             f"\n{page_start + 1}-{page_end} of {len(result_list)} results",

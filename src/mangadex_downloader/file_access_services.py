@@ -5,10 +5,10 @@ from PIL import Image
 
 def save_image(image_data: bytes, file_path: str) -> None:
     """
-    Saves the image data to a file with the given file name
+    Saves the image data to a file with with a name and location determined by the file_path
 
     :param image_data: The image data to save
-    :param file_name: The file name to save the image data as
+    :param file_name: The path to the file to save the image data to
     :return: None
     """
 
@@ -19,9 +19,10 @@ def save_image(image_data: bytes, file_path: str) -> None:
 
 def save_image_list(image_data_list: list[bytes], directory: str) -> None:
     """
-    Saves each element in the image data list to a file named after the index of the element
+    Saves each element in image_data_list to a file named after the index of the element
 
     :param image_data_list: The image data list to save
+    :param directory: The directory to save the images to
     :return: None
     """
 
@@ -32,10 +33,10 @@ def save_image_list(image_data_list: list[bytes], directory: str) -> None:
 
 def get_file_list(path: str) -> list[str]:
     """
-    Get a list of all files in a directory.
+    Get a list of all files in a directory
 
-    :param path: The path to the directory.
-    :return: A list of all files in the directory.
+    :param path: The path to the directory
+    :return: A list of all files in the directory
     """
     try:
         if not os.path.exists(path):
@@ -63,11 +64,11 @@ def convert_images_to_pdf(
     file_list: list[str], output_path: str, output_name: str
 ) -> None:
     """
-    Converts a list of images to a PDF file.
+    Converts a list of images to a PDF file
 
-    :param file_list: A list of image files to be converted.
-    :param output_path: The path to the output directory.
-    :param output_name: The name of the output PDF file.
+    :param file_list: A list of image files to be converted
+    :param output_path: The path to the output directory
+    :param output_name: The name of the output PDF file
     """
     images: Image.Image = [
         Image.open(file)
@@ -94,6 +95,9 @@ def generate_PDF(image_data_list: list[bytes], output_name: str) -> None:
     """
 
     with tempfile.TemporaryDirectory() as temp_dir:
-        print(f"Generating {output_name}.pdf...")
         save_image_list(image_data_list, temp_dir)
-        convert_images_to_pdf(get_file_list(temp_dir), os.getcwd(), output_name)
+        file_list: list[str] = get_file_list(temp_dir)
+        file_list.sort(key=lambda x: int(x.split("\\")[-1].split(".")[0]))
+
+        convert_images_to_pdf(file_list, os.getcwd(), output_name)
+        print(f"{output_name}.pdf saved to {os.getcwd()}")
