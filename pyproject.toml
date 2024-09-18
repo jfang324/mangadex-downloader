@@ -17,9 +17,14 @@ mangadex-downloader = "mangadex_downloader.main:main"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
 coverage = "^7.6.1"
+pytest-asyncio = "^0.24.0"
 
 [tool.poetry.group.windows.dependencies]
 windows-curses = "^2.3.3"
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"
+asyncio_mode = "auto"
 
 [build-system]
 requires = ["poetry-core"]

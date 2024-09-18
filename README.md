@@ -1,6 +1,6 @@
 ## About The Project
 
-A CLI tool that makes it easy to search for and download manga from [MangaDex](https://mangadex.org/).
+A CLI tool that makes it easy to search for and download manga from [MangaDex](https://mangadex.org/)
 
 ## Getting Started
 
@@ -9,7 +9,7 @@ A CLI tool that makes it easy to search for and download manga from [MangaDex](h
 To use this tool, you will need the following:
 
 -   Python 3.11 or higher
--   python-dotenv (if you want to use the .env file)
+-   python-dotenv (if you want to use the .env file, optional unless the API changes)
 -   aiohttp
 -   Pillow
 -   windows-curses (if you are using Windows)
@@ -53,7 +53,7 @@ pip install .
 
 ## Acknowledgements
 
--   [MangaDex ](https://mangadex.org/) for providing the API used in this project
+-   [MangaDex](https://mangadex.org/) for providing the API used in this project
 
 ## Known Issues
 
