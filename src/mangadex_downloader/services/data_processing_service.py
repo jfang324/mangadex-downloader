@@ -44,7 +44,10 @@ def process_chapter_data(chapter_data: dict) -> list[dict]:
     already_contains: set[str] = set()
 
     for element in data:
-        if element["attributes"]["chapter"] not in already_contains:
+        if (
+            "chapter" in element["attributes"]
+            and element["attributes"]["chapter"] not in already_contains
+        ):
             chapter = {}
             chapter["title"] = (
                 element["attributes"]["title"]
@@ -56,7 +59,7 @@ def process_chapter_data(chapter_data: dict) -> list[dict]:
                 element["attributes"]["chapter"]
                 if "chapter" in element["attributes"]
                 and element["attributes"]["chapter"]
-                else 0
+                else None
             )
 
             already_contains.add(element["attributes"]["chapter"])

@@ -10,21 +10,58 @@ mock_manga_data: dict = {
             "attributes": {
                 "title": {"en": "Attack on Titan"},
             },
+            "status": "current",
         },
         {
             "id": "2",
             "attributes": {
                 "title": {"en": "One Piece"},
             },
+            "status": "current",
         },
         {
             "id": "3",
             "attributes": {
                 "title": {"en": "Naruto"},
             },
+            "status": "current",
+        },
+        {
+            "id": "4",
+            "attributes": {},
+            "status": "current",
+        },
+        {
+            "attributes": {
+                "title": {"en": "Naruto"},
+                "status": "finished",
+            },
         },
     ]
 }
+mock_processed_manga_data: list[dict] = [
+    {
+        "title": "Attack on Titan",
+        "id": "1",
+    },
+    {
+        "title": "One Piece",
+        "id": "2",
+    },
+    {
+        "title": "Naruto",
+        "id": "3",
+    },
+    {
+        "title": None,
+        "id": "4",
+    },
+    {
+        "title": "Naruto",
+        "id": None,
+    },
+]
+
 mock_chapter_data: dict = {
     "data": [
         {
@@ -33,6 +70,15 @@ mock_chapter_data: dict = {
                 "title": "Chapter 1",
                 "chapter": "1",
             },
+            "uploadDate": "2022-01-01T00:00:00.000Z",
+        },
+        {
+            "id": "6",
+            "attributes": {
+                "title": "Chapter 1",
+                "chapter": "1",
+            },
+            "uploadDate": "2022-01-01T00:00:00.000Z",
         },
         {
             "id": "2",
@@ -40,23 +86,55 @@ mock_chapter_data: dict = {
                 "title": "Chapter 2",
                 "chapter": "2",
             },
+            "uploadDate": "2022-01-02T00:00:00.000Z",
         },
         {
             "id": "3",
             "attributes": {
                 "chapter": "3",
             },
+            "uploadDate": "2022-01-03T00:00:00.000Z",
         },
         {
             "id": "4",
             "attributes": {
                 "title": "Chapter 4",
             },
+            "uploadDate": "2022-01-04T00:00:00.000Z",
+        },
+        {
+            "attributes": {
+                "title": "Chapter 5",
+                "chapter": "5",
+            },
         },
     ]
 }
+mock_processed_chapter_data: list[dict] = [
+    {
+        "title": "Chapter 1",
+        "id": "1",
+        "chapter_number": "1",
+    },
+    {
+        "title": "Chapter 2",
+        "id": "2",
+        "chapter_number": "2",
+    },
+    {
+        "title": None,
+        "id": "3",
+        "chapter_number": "3",
+    },
+    {
+        "title": "Chapter 5",
+        "id": None,
+        "chapter_number": "5",
+    },
+]
+
 mock_download_resource_data: dict = {
-    "baseUrl": "https://mangaCDN.com/",
+    "baseUrl": "https://mangaCDN.com",
     "chapter": {
         "hash": "hash",
         "data": [
@@ -67,6 +145,14 @@ mock_download_resource_data: dict = {
         ],
     },
 }
+mock_processed_download_resource_data: list[str] = [
+    "https://mangaCDN.com/data/hash/chapter1.jpg",
+    "https://mangaCDN.com/data/hash/chapter2.jpg",
+    "https://mangaCDN.com/data/hash/chapter3.jpg",
+    "https://mangaCDN.com/data/hash/chapter4.jpg",
+]
+
+
 mock_image_data: bytes = b"A long string of bytes representing an image"
 mock_url_list: list[str] = [
     "https://test.com/1.jpg",

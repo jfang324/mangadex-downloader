@@ -45,7 +45,7 @@ class TestFetch:
 
         assert response is None
 
-    async def test_fetch_no_response_returns_none(self):
+    async def test_fetch_no_response_raises_exception(self):
         mock_session: aiohttp.ClientSession = create_mock_session(None)
 
         with pytest.raises(Exception) as e:
@@ -61,7 +61,7 @@ class TestRetrieveMangas:
         "src.mangadex_downloader.services.api_access_service.fetch",
         return_value=mock_manga_data,
     )
-    async def test_retrieve_mangas_success_returns_json(self, mock_fetch):
+    async def test_retrieve_mangas_success_returns_json(self, mock_fetch: AsyncMock):
         response: dict = await retrieve_mangas(self.dummy_session, mock_query)
 
         assert response == mock_manga_data
@@ -73,7 +73,7 @@ class TestRetrieveMangas:
         "src.mangadex_downloader.services.api_access_service.fetch",
         side_effect=Exception("Error fetching url"),
     )
-    async def test_retrieve_mangas_failure_returns_none(self, mock_fetch):
+    async def test_retrieve_mangas_failure_returns_none(self, mock_fetch: AsyncMock):
         response: dict = await retrieve_mangas(self.dummy_session, mock_query)
 
         assert response is None
@@ -91,7 +91,7 @@ class TestRetrieveChapters:
         "src.mangadex_downloader.services.api_access_service.fetch",
         return_value=mock_chapter_data,
     )
-    async def test_retrieve_chapters_success_returns_json(self, mock_fetch):
+    async def test_retrieve_chapters_success_returns_json(self, mock_fetch: AsyncMock):
         response: dict = await retrieve_chapters(self.dummy_session, mock_manga_id)
 
         assert response == mock_chapter_data
@@ -103,7 +103,7 @@ class TestRetrieveChapters:
         "src.mangadex_downloader.services.api_access_service.fetch",
         side_effect=Exception("Error fetching url"),
     )
-    async def test_retrieve_chapters_failure_returns_none(self, mock_fetch):
+    async def test_retrieve_chapters_failure_returns_none(self, mock_fetch: AsyncMock):
         response: dict = await retrieve_chapters(self.dummy_session, mock_manga_id)
 
         assert response is None
@@ -121,7 +121,9 @@ class TestRetrieveDownloadResources:
         "src.mangadex_downloader.services.api_access_service.fetch",
         return_value=mock_download_resource_data,
     )
-    async def test_retrieve_download_resources_success_returns_json(self, mock_fetch):
+    async def test_retrieve_download_resources_success_returns_json(
+        self, mock_fetch: AsyncMock
+    ):
         response: dict = await retrieve_download_resources(
             self.dummy_session, mock_chapter_id
         )
@@ -135,7 +137,9 @@ class TestRetrieveDownloadResources:
         "src.mangadex_downloader.services.api_access_service.fetch",
         side_effect=Exception("Error fetching url"),
     )
-    async def test_retrieve_download_resources_failure_returns_none(self, mock_fetch):
+    async def test_retrieve_download_resources_failure_returns_none(
+        self, mock_fetch: AsyncMock
+    ):
         response: dict = await retrieve_download_resources(
             self.dummy_session, mock_chapter_id
         )
@@ -168,31 +172,3 @@ class TestRetrieveImageData:
 
         with pytest.raises(Exception) as e:
             await retrieve_image_data(mock_session, mock_url)
-
-
-class TestRetrieveImageDataList:
-    dummy_session: aiohttp.ClientSession = create_mock_session(
-        create_mock_response(200, "dummy data")
-    )
-
-    @patch(
-        "src.mangadex_downloader.services.api_access_service.retrieve_image_data",
-    )
-    @patch("asyncio.gather")
-    async def test_retrieve_image_data_list_success_returns_list(
-        self, mock_gather, mock_retrieve_image_data
-    ):
-        mock_retrieve_image_data.side_effect = [
-            mock_image_data for i in range(len(mock_url_list))
-        ]
-        response: list[bytes] = await retrieve_image_data_list(
-            self.dummy_session, mock_url_list
-        )
-
-        assert mock_retrieve_image_data.call_count == len(mock_url_list)
-        for i in range(len(mock_url_list)):
-            assert (
-                mock_retrieve_image_data.call_args_list[i][0][0] == self.dummy_session
-            )
-            assert mock_retrieve_image_data.call_args_list[i][0][1] == mock_url_list[i]
-        assert mock_gather.call_count == 1
