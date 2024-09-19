@@ -91,15 +91,9 @@ class TestProcessChapterData:
             }
         )
 
-        assert response == [
-            {
-                "title": "Chapter 5",
-                "id": None,
-                "chapter_number": "5",
-            }
-        ]
+        assert response == []
 
-    def test_process_chapter_data_returns_correct_data_with_no_chapter(self):
+    def test_process_chapter_data_returns_correct_data_with_no_chapter_number(self):
         response: list[dict] = process_chapter_data(
             {
                 "data": [
@@ -113,7 +107,7 @@ class TestProcessChapterData:
             }
         )
 
-        assert response == []
+        assert response == [{"title": "Chapter 5", "id": "5", "chapter_number": "0"}]
 
 
 class TestProcessDownloadResourceData:

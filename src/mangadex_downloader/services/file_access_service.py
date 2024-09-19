@@ -31,7 +31,7 @@ def save_image_list(image_data_list: list[bytes], directory: str) -> None:
         save_image(image_data, file_path)
 
 
-def get_file_list(path: str) -> list[str]:
+def get_file_list(directory_path: str) -> list[str]:
     """
     Get a list of all files in a directory
 
@@ -39,20 +39,20 @@ def get_file_list(path: str) -> list[str]:
     :return: A list of all files in the directory
     """
     try:
-        if not os.path.exists(path):
-            raise FileNotFoundError(f"The directory {path} does not exist.")
+        if not os.path.exists(directory_path):
+            raise FileNotFoundError(f"The directory {directory_path} does not exist.")
 
-        if os.path.isfile(path):
-            raise Exception(f"{path} is not a directory.")
+        if os.path.isfile(directory_path):
+            raise Exception(f"{directory_path} is not a directory.")
 
-        everything_list: list[str] = os.listdir(path)
+        everything_list: list[str] = os.listdir(directory_path)
         file_list: list[str] = []
 
         for item in everything_list:
-            if os.path.isfile(os.path.join(path, item)) and item.endswith(
+            if os.path.isfile(os.path.join(directory_path, item)) and item.endswith(
                 (".png", ".jpg", ".jpeg")
             ):
-                file_list.append(os.path.join(path, item))
+                file_list.append(os.path.join(directory_path, item))
 
         return file_list
     except Exception as e:
@@ -78,7 +78,6 @@ def convert_images_to_pdf(
     images[0].save(
         os.path.join(output_path, output_name + ".pdf"),
         "PDF",
-        resolution=100.0,
         save_all=True,
         append_images=images[1:],
     )
@@ -97,7 +96,7 @@ def generate_PDF(image_data_list: list[bytes], output_name: str) -> None:
     with tempfile.TemporaryDirectory() as temp_dir:
         save_image_list(image_data_list, temp_dir)
         file_list: list[str] = get_file_list(temp_dir)
-        file_list.sort(key=lambda x: int(x.split("\\")[-1].split(".")[0]))
+        file_list.sort(key=lambda x: int(x.split(os.path.sep)[-1].split(".")[0]))
 
         convert_images_to_pdf(file_list, os.getcwd(), output_name)
         print(f"{output_name}.pdf saved to {os.getcwd()}")

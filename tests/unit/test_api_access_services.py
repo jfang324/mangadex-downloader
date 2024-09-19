@@ -171,4 +171,6 @@ class TestRetrieveImageData:
         mock_session: aiohttp.ClientSession = create_mock_session(None)
 
         with pytest.raises(Exception) as e:
-            await retrieve_image_data(mock_session, mock_url)
+            response: bytes = await retrieve_image_data(mock_session, mock_url)
+
+            assert response is None

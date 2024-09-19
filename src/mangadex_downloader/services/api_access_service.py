@@ -102,7 +102,7 @@ async def retrieve_image_data(session: aiohttp.ClientSession, image_url: str) ->
     """
 
     async with session.get(image_url) as response:
-        if response.status == 200:
+        if response and response.status == 200:
             return await response.read()
         else:
             raise Exception(
@@ -117,7 +117,7 @@ async def retrieve_image_data_list(
     Retrieves the image data from the given image urls
 
     :param session: The aiohttp.ClientSession to use
-    :param image_links: The urls of the images to retrieve data for
+    :param url_list: The urls of the images to retrieve data for
     :return: A list containing the binary data of the images
     """
     try:

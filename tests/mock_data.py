@@ -112,6 +112,11 @@ mock_chapter_data: dict = {
 }
 mock_processed_chapter_data: list[dict] = [
     {
+        "title": "Chapter 4",
+        "id": "4",
+        "chapter_number": "0",
+    },
+    {
         "title": "Chapter 1",
         "id": "1",
         "chapter_number": "1",
@@ -125,11 +130,6 @@ mock_processed_chapter_data: list[dict] = [
         "title": None,
         "id": "3",
         "chapter_number": "3",
-    },
-    {
-        "title": "Chapter 5",
-        "id": None,
-        "chapter_number": "5",
     },
 ]
 
@@ -160,3 +160,15 @@ mock_url_list: list[str] = [
     "https://test.com/3.jpg",
     "https://test.com/4.jpg",
 ]
+
+mock_image_data_list: list[bytes] = [
+    b"A long string of bytes representing an image",
+    b"Another long string of bytes representing an image",
+    b"Yet another long string of bytes representing an image",
+]
+mock_image_paths: list[str] = [
+    "1.jpg",
+    "2.jpg",
+    "3.jpg",
+]
+mock_directory: str = "c:/usr/test"

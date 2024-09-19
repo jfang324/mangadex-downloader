@@ -8,9 +8,9 @@ A CLI tool that makes it easy to search for and download manga from [MangaDex](h
 
 To use this tool, you will need the following:
 
--   Python 3.11 or higher
+-   Python 3.9, 3.10, or 3.11
 -   python-dotenv (if you want to use the .env file, optional unless the API changes)
--   aiohttp
+-   aiohttp (speed-ups recommended)
 -   Pillow
 -   windows-curses (if you are using Windows)
 
@@ -48,6 +48,18 @@ pip install .
 ```
 
 5. The script will now be installed in your python scripts directory where you can run it or add it to your PATH to be able to run it from anywhere.
+
+6. To run the tests, install the development dependencies:
+
+```bash
+pip install -r requirements-dev.txt
+```
+
+7. Run the tests:
+
+```bash
+coverage run --branch --source=src -m pytest
+```
 
 ## Gallery & Demonstrations
 

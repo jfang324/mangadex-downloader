@@ -6,7 +6,7 @@ def process_manga_data(manga_data: dict) -> list[dict]:
         id: mangaID for the API
     }
 
-    :param manga_info: The manga info dictionary
+    :param manga_data: The manga data dictionary
     :return: A list containing the processed manga data
     """
 
@@ -44,26 +44,24 @@ def process_chapter_data(chapter_data: dict) -> list[dict]:
     already_contains: set[str] = set()
 
     for element in data:
-        if (
-            "chapter" in element["attributes"]
-            and element["attributes"]["chapter"] not in already_contains
-        ):
+        if "id" in element:
             chapter = {}
             chapter["title"] = (
                 element["attributes"]["title"]
                 if "title" in element["attributes"]
                 else None
             )
-            chapter["id"] = element["id"] if "id" in element else None
+            chapter["id"] = element["id"]
             chapter["chapter_number"] = (
                 element["attributes"]["chapter"]
                 if "chapter" in element["attributes"]
                 and element["attributes"]["chapter"]
-                else None
+                else "0"
             )
 
-            already_contains.add(element["attributes"]["chapter"])
-            processed_chapter_data.append(chapter)
+            if chapter["chapter_number"] not in already_contains:
+                already_contains.add(chapter["chapter_number"])
+                processed_chapter_data.append(chapter)
 
     processed_chapter_data.sort(key=lambda x: float(x["chapter_number"]))
 
@@ -80,10 +78,10 @@ def process_download_resource_data(download_resources: dict) -> list[str]:
 
     download_urls: list[str] = []
     base_url: str = download_resources["baseUrl"]
-    hash: str = download_resources["chapter"]["hash"]
+    url_hash: str = download_resources["chapter"]["hash"]
     quality: str = "data"
 
     for element in download_resources["chapter"][quality]:
-        download_urls.append(f"{base_url}/{quality}/{hash}/{element}")
+        download_urls.append(f"{base_url}/{quality}/{url_hash}/{element}")
 
     return download_urls
