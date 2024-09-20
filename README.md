@@ -65,10 +65,14 @@ pip install -r requirements-dev.txt
 8. Run the tests:
 
 ```bash
-coverage run --branch --source=src -m pytest
+coverage run -m pytest -v
 ```
 
 ## Gallery & Demonstrations
+
+
+https://github.com/user-attachments/assets/90d6f14f-1847-4bd9-9de3-947c70ff6060
+
 
 ## Acknowledgements
 
