@@ -48,15 +48,21 @@ pip install windows-curses
 pip install .
 ```
 
-5. The script will now be installed in your python scripts directory where you can run it or add it to your PATH to be able to run it from anywhere.
+5. The script will now be installed in your python scripts directory(probably `C:\Users\<username>\AppData\Roaming\Python\Python3.X\Scripts` for Windows users). To run the script, navigate to the scripts directory and run the following command:
 
-6. To run the tests, install the development dependencies:
+```bash
+mangadex-downloader
+```
+
+6. If you want to be able to run the script from anywhere, you can add the scripts directory to your PATH environment variable.
+
+7. To run the tests, install the development dependencies:
 
 ```bash
 pip install -r requirements-dev.txt
 ```
 
-7. Run the tests:
+8. Run the tests:
 
 ```bash
 coverage run --branch --source=src -m pytest
