@@ -14,14 +14,18 @@ def process_manga_data(manga_data: dict) -> list[dict]:
     data: list[dict] = manga_data["data"]
 
     for element in data:
-        manga = {}
-        manga["title"] = (
-            element["attributes"]["title"]["en"]
-            if "title" in element["attributes"]
-            else None
-        )
-        manga["id"] = element["id"] if "id" in element else None
-        processed_manga_data.append(manga)
+        if "id" in element:
+            manga = {}
+            manga["title"] = (
+                element["attributes"]["title"]["en"]
+                if "title" in element["attributes"]
+                and "en" in element["attributes"]["title"]
+                else element["attributes"]["title"][
+                    list(element["attributes"]["title"])[0]
+                ]
+            )
+            manga["id"] = element["id"]
+            processed_manga_data.append(manga)
 
     return processed_manga_data
 

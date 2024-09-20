@@ -21,6 +21,8 @@ async def start(stdscr: curses) -> None:
     curses.start_color()
     curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
     curses.init_pair(2, curses.COLOR_RED, curses.COLOR_WHITE)
+    curses.init_pair(3, curses.COLOR_CYAN, curses.COLOR_WHITE)
+    curses.init_pair(4, curses.COLOR_WHITE, curses.COLOR_BLACK)
 
     # Create a new session
     session: aiohttp.ClientSession = SessionManager.create_session()
@@ -28,7 +30,6 @@ async def start(stdscr: curses) -> None:
     # Prompt user for a initial query
     query: str = prompt_user_input(stdscr, "Enter a manga title")
 
-    # Exit if no input was given
     if query == "":
         await end()
 
@@ -41,8 +42,7 @@ async def start(stdscr: curses) -> None:
         stdscr, processed_manga_data, 20, "Select manga"
     )
 
-    # Exit if no manga was selected
-    if selected_manga_index == -1:
+    if selected_manga_index == None:
         await end()
 
     # Retrieve and process the API response into a list of chapters of the selected manga
@@ -51,30 +51,58 @@ async def start(stdscr: curses) -> None:
     )
     processed_chapter_data: list[dict] = process_chapter_data(chapter_data)
 
-    # Prompt user to select a chapter out of the list of chapters
-    selected_chapter_index: int = prompt_list_selection(
-        stdscr, processed_chapter_data, 20, "Select chapter"
+    # Prompt user to select a list of chapters to download
+    selected_chapters_indexes: list[int] = prompt_list_multi_selection(
+        stdscr, processed_chapter_data, 20, "Select chapters"
     )
 
-    # Exit if no chapter was selected
-    if selected_chapter_index == -1:
+    if selected_chapters_indexes == None or len(selected_chapters_indexes) == 0:
         await end()
 
-    # Retrieve and process the API response into a list of download links for the selected chapter
-    download_resources: dict = await retrieve_download_resources(
-        session, processed_chapter_data[int(selected_chapter_index)]["id"]
-    )
-    download_links: list[str] = process_download_resource_data(download_resources)
-
-    # Download the images from the download links and generate a PDF file
-    image_data_list: list[bytes] = await retrieve_image_data_list(
-        session, download_links
-    )
-    generate_PDF(
-        image_data_list,
-        f'{processed_manga_data[int(selected_manga_index)]["title"]} [{processed_chapter_data[int(selected_chapter_index)]["chapter_number"]}]',
+    # Retrieve download resources for the selected chapters
+    selected_chapter_ids: list[str] = [
+        processed_chapter_data[i]["id"] for i in selected_chapters_indexes
+    ]
+    all_download_resources_tasks: list[dict] = [
+        retrieve_download_resources(session, id) for id in selected_chapter_ids
+    ]
+    all_download_resources: list[dict] = await asyncio.gather(
+        *all_download_resources_tasks
     )
 
+    # Process the download resources into lists of download links and retrieve the image data for each batch
+    link_batches: list[list[str]] = [
+        process_download_resource_data(dr) for dr in all_download_resources
+    ]
+    all_batch_download_tasks: list[list[bytes]] = [
+        retrieve_image_data_list(session, link_batch) for link_batch in link_batches
+    ]
+    all_image_data_lists: list[list[bytes]] = await asyncio.gather(
+        *all_batch_download_tasks
+    )
+
+    # Display the progress of the download and generate the PDF files
+    stdscr.clear()
+    for i in range(len(all_image_data_lists)):
+        stdscr.addstr(
+            i,
+            0,
+            f'Downloading {processed_manga_data[int(selected_manga_index)]["title"]} [{processed_chapter_data[selected_chapters_indexes[i]]["chapter_number"]}]',
+            curses.color_pair(1),
+        )
+        stdscr.refresh()
+        generate_PDF(
+            all_image_data_lists[i],
+            f'{processed_manga_data[int(selected_manga_index)]["title"]} [{processed_chapter_data[selected_chapters_indexes[i]]["chapter_number"]}]',
+        )
+    print(
+        "\033[31m"
+        + f"Finished downloading {len(all_image_data_lists)} chapters of {processed_manga_data[selected_manga_index]['title']}"
+        + "\033[0m"
+    )
+    print("\033[31m" + f"Saved to {os.getcwd()}" + "\033[0m")
+
+    # Close the session and exit the program
     await end()
 
 

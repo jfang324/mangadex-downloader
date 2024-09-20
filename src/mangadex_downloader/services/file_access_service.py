@@ -99,4 +99,3 @@ def generate_PDF(image_data_list: list[bytes], output_name: str) -> None:
         file_list.sort(key=lambda x: int(x.split(os.path.sep)[-1].split(".")[0]))
 
         convert_images_to_pdf(file_list, os.getcwd(), output_name)
-        print(f"{output_name}.pdf saved to {os.getcwd()}")

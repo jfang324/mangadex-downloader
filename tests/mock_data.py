@@ -28,7 +28,7 @@ mock_manga_data: dict = {
         },
         {
             "id": "4",
-            "attributes": {},
+            "attributes": {"title": {"sp": "Uno Piece"}},
             "status": "current",
         },
         {
@@ -53,12 +53,8 @@ mock_processed_manga_data: list[dict] = [
         "id": "3",
     },
     {
-        "title": None,
+        "title": "Uno Piece",
         "id": "4",
-    },
-    {
-        "title": "Naruto",
-        "id": None,
     },
 ]
 

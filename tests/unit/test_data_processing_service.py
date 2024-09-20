@@ -14,7 +14,11 @@ class TestProcessMangaData:
                 "data": [
                     {
                         "id": "4",
-                        "attributes": {},
+                        "attributes": {
+                            "title": {
+                                "br": "Naruto",
+                            },
+                        },
                         "status": "current",
                     }
                 ]
@@ -23,7 +27,7 @@ class TestProcessMangaData:
 
         assert response == [
             {
-                "title": None,
+                "title": "Naruto",
                 "id": "4",
             }
         ]
@@ -42,12 +46,7 @@ class TestProcessMangaData:
             }
         )
 
-        assert response == [
-            {
-                "title": "Naruto",
-                "id": None,
-            }
-        ]
+        assert response == []
 
 
 class TestProcessChapterData:

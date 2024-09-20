@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "A Python package for downloading manga from MangaDex"
 authors = ["Jeffery Fang <Jefferyfang324@gmail.com>"]
 readme = "README.md"
+repository = "https://github.com/jfang324/mangadex-downloader"
 
 [tool.poetry.dependencies]
 python = ">=3.9"

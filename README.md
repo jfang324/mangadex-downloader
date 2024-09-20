@@ -10,7 +10,7 @@ To use this tool, you will need the following:
 
 -   Python 3.9, 3.10, or 3.11
 -   python-dotenv (if you want to use the .env file, optional unless the API changes)
--   aiohttp (speed-ups recommended)
+-   aiohttp
 -   Pillow
 -   windows-curses (if you are using Windows)
 
@@ -69,6 +69,7 @@ coverage run --branch --source=src -m pytest
 
 ## Known Issues
 
+-   Currently only supports english translations
 -   Characters that can't be used in file names cause unexpected behavior when generating the PDF file when they are included in the title of the manga
 -   Characters used for query parameters cause unexpected behavior included in user input
 
