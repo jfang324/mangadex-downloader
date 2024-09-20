@@ -70,11 +70,13 @@ def convert_images_to_pdf(
     :param output_path: The path to the output directory
     :param output_name: The name of the output PDF file
     """
-    images: Image.Image = [
-        Image.open(file)
-        for file in file_list
-        if os.path.exists(file) and os.path.isfile(file)
-    ]
+    images = []
+    for file in file_list:
+        if os.path.exists(file) and os.path.isfile(file):
+            img: Image.Image = Image.open(file)
+            img = img.convert("RGB")
+            images.append(img)
+
     images[0].save(
         os.path.join(output_path, output_name + ".pdf"),
         "PDF",

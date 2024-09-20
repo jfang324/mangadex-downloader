@@ -19,9 +19,9 @@ def prompt_user_input(stdscr: curses, message: str) -> str:
         stdscr.addstr(f"{user_input}")
 
         key: str = stdscr.getch()
-        if key == ord("\n"):
+        if key in [ord("\n"), curses.KEY_ENTER]:
             break
-        elif key == ord("\b"):
+        elif key in [ord("\b"), curses.KEY_BACKSPACE]:
             user_input = user_input[:-1]
         elif key == 27:
             user_input = ""
