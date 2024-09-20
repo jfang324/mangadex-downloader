@@ -5,3 +5,4 @@ htmlcov
 *.egg-info
 build
 poetry.lock
+src/mangadex_downloader/__pycache__/*
