@@ -18,6 +18,7 @@ To run the tests, you will need the following:
 
 -   Pytest
 -   Coverage
+-   pytest-asyncio
 
 ## Installation
 
