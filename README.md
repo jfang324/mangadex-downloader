@@ -20,7 +20,7 @@ To run the tests, you will need the following:
 -   Coverage
 -   pytest-asyncio
 
-## Installation
+### Installation
 
 To install the tool, run the following commands in your terminal:
 
@@ -48,7 +48,7 @@ pip install windows-curses
 pip install .
 ```
 
-5. The script will now be installed in your python scripts directory(probably `C:\Users\<username>\AppData\Roaming\Python\Python3.X\Scripts` for Windows users). To run the script, navigate to the scripts directory and run the following command:
+5. The script will now be installed in your python scripts directory (probably `C:\Users\<username>\AppData\Roaming\Python\Python3.X\Scripts` for Windows users). To run the script, navigate to the scripts directory and run the following command:
 
 ```bash
 mangadex-downloader
@@ -70,9 +70,7 @@ coverage run -m pytest -v
 
 ## Gallery & Demonstrations
 
-
 https://github.com/user-attachments/assets/90d6f14f-1847-4bd9-9de3-947c70ff6060
-
 
 ## Acknowledgements
 
