@@ -285,15 +285,16 @@ async def _build_configurations(
     """Build startup configuration objects."""
     preset = _get_runtime_preset(args)
     pipeline_config = PipelineConfig(
-        num_resolve_workers=preset.resolve_workers if preset else args.resolve_workers,
-        num_download_workers=preset.download_workers if preset else args.download_workers,
-        num_merge_workers=preset.merge_workers if preset else args.merge_workers,
-        resolve_rate_limit=preset.resolve_rate_limit if preset else args.resolve_rate_limit,
-        download_rate_limit=preset.download_rate_limit if preset else args.download_rate_limit,
-        resolve_queue_size=preset.queue_size if preset else args.queue_size,
-        download_queue_size=(preset.queue_size if preset else args.queue_size) * 2,
-        merge_queue_size=preset.queue_size if preset else args.queue_size,
-        upload_queue_size=preset.queue_size if preset else args.queue_size,
+        num_resolve_workers=preset.resolve_workers,
+        num_download_workers=preset.download_workers,
+        num_merge_workers=preset.merge_workers,
+        num_upload_workers=preset.upload_workers,
+        resolve_rate_limit=preset.resolve_rate_limit,
+        download_rate_limit=preset.download_rate_limit,
+        resolve_queue_size=preset.queue_size,
+        download_queue_size=preset.queue_size * 2,
+        merge_queue_size=preset.queue_size,
+        upload_queue_size=preset.queue_size,
         benchmark_enabled=args.benchmark,
     )
     app_config = await settings_store.load()
@@ -301,11 +302,8 @@ async def _build_configurations(
     return pipeline_config, app_config
 
 
-def _get_runtime_preset(args: Namespace) -> RuntimePreset | None:
-    """Return the selected runtime preset, if any."""
-    if args.preset is None:
-        return None
-
+def _get_runtime_preset(args: Namespace) -> RuntimePreset:
+    """Return the selected runtime preset or the default preset."""
     return get_preset(args.preset)
 
 
@@ -326,8 +324,8 @@ async def _build_async_dependencies(
     preset = _get_runtime_preset(args)
     provider_manager = ContentProviderManager(
         session,
-        resolve_rate_limit=preset.resolve_rate_limit if preset else args.resolve_rate_limit,
-        download_rate_limit=preset.download_rate_limit if preset else args.download_rate_limit,
+        preset.resolve_rate_limit,
+        preset.download_rate_limit,
     )
     download_client = DownloadClient(session)
     webhook_config = await webhook_config_store.load()
