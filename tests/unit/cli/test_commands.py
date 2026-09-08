@@ -2,14 +2,6 @@ import pytest
 
 from src.manga_archiver.cli.commands import parse_args
 from src.manga_archiver.cli.presets import get_preset_names
-from src.manga_archiver.constants.defaults import (
-    DEFAULT_DOWNLOAD_RATE_LIMIT,
-    DEFAULT_DOWNLOAD_WORKERS,
-    DEFAULT_MERGE_WORKERS,
-    DEFAULT_PROVIDER_RATE_LIMIT,
-    DEFAULT_QUEUE_SIZE,
-    DEFAULT_RESOLVE_WORKERS,
-)
 
 ARGPARSE_USAGE_ERROR = 2
 
@@ -19,13 +11,7 @@ class TestParseArgs:
         args = parse_args([])
 
         assert args.command is None
-        assert args.resolve_workers == DEFAULT_RESOLVE_WORKERS
-        assert args.download_workers == DEFAULT_DOWNLOAD_WORKERS
-        assert args.merge_workers == DEFAULT_MERGE_WORKERS
-        assert args.resolve_rate_limit == DEFAULT_PROVIDER_RATE_LIMIT
-        assert args.download_rate_limit == DEFAULT_DOWNLOAD_RATE_LIMIT
-        assert args.queue_size == DEFAULT_QUEUE_SIZE
-        assert args.preset is None
+        assert args.preset == "default"
         assert args.archive is False
         assert args.benchmark is False
         assert args.backlog is False
@@ -42,39 +28,6 @@ class TestParseArgs:
             parse_args(["--preset", "balanced"])
 
         assert exc_info.value.code == ARGPARSE_USAGE_ERROR
-
-    def test_parses_application_command_options(self) -> None:
-        args = parse_args(
-            [
-                "--resolve-workers",
-                "3",
-                "--download-workers",
-                "4",
-                "--merge-workers",
-                "5",
-                "--resolve-rate-limit",
-                "6",
-                "--download-rate-limit",
-                "7",
-                "--queue-size",
-                "8",
-                "--archive",
-                "--benchmark",
-                "--backlog",
-                "--headless",
-            ]
-        )
-
-        assert args.resolve_workers == 3
-        assert args.download_workers == 4
-        assert args.merge_workers == 5
-        assert args.resolve_rate_limit == 6
-        assert args.download_rate_limit == 7
-        assert args.queue_size == 8
-        assert args.archive is True
-        assert args.benchmark is True
-        assert args.backlog is True
-        assert args.headless is True
 
     @pytest.mark.parametrize("auth_action", ["login", "logout"], ids=["login", "logout"])
     def test_parses_auth_subcommands(self, auth_action: str) -> None:
@@ -168,58 +121,6 @@ class TestParseArgs:
     def test_rejects_removed_auto_exit_flag(self) -> None:
         with pytest.raises(SystemExit) as exc_info:
             parse_args(["--auto-exit"])
-
-        assert exc_info.value.code == ARGPARSE_USAGE_ERROR
-
-    @pytest.mark.parametrize(
-        "argv",
-        [
-            ["--resolve-workers", "0"],
-            ["--download-workers", "-1"],
-            ["--merge-workers", "abc"],
-            ["--resolve-rate-limit", "0"],
-            ["--download-rate-limit", "0"],
-            ["--queue-size", "0"],
-        ],
-        ids=[
-            "zero-resolve-workers",
-            "negative-download-workers",
-            "non-integer-merge-workers",
-            "zero-resolve-rate-limit",
-            "zero-download-rate-limit",
-            "zero-queue-size",
-        ],
-    )
-    def test_rejects_invalid_positive_int_options(self, argv: list[str]) -> None:
-        with pytest.raises(SystemExit) as exc_info:
-            parse_args(argv)
-
-        assert exc_info.value.code == ARGPARSE_USAGE_ERROR
-
-    @pytest.mark.parametrize(
-        "argv",
-        [
-            ["--preset", "fast", "--resolve-workers", "3"],
-            ["--preset", "fast", "--download-workers", "4"],
-            ["--preset", "fast", "--merge-workers", "5"],
-            ["--preset", "fast", "--resolve-rate-limit", "6"],
-            ["--preset", "fast", "--download-rate-limit", "7"],
-            ["--preset", "fast", "--queue-size", "8"],
-            ["--preset=fast", "--download-workers=4"],
-        ],
-        ids=[
-            "resolve-workers",
-            "download-workers",
-            "merge-workers",
-            "resolve-rate-limit",
-            "download-rate-limit",
-            "queue-size",
-            "equals-syntax",
-        ],
-    )
-    def test_rejects_preset_with_manual_tuning_options(self, argv: list[str]) -> None:
-        with pytest.raises(SystemExit) as exc_info:
-            parse_args(argv)
 
         assert exc_info.value.code == ARGPARSE_USAGE_ERROR
 
