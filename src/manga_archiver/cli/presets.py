@@ -1,5 +1,15 @@
 from dataclasses import dataclass
 
+from ..constants.defaults import (
+    DEFAULT_DOWNLOAD_RATE_LIMIT,
+    DEFAULT_DOWNLOAD_WORKERS,
+    DEFAULT_MERGE_WORKERS,
+    DEFAULT_PROVIDER_RATE_LIMIT,
+    DEFAULT_QUEUE_SIZE,
+    DEFAULT_RESOLVE_WORKERS,
+    DEFAULT_UPLOAD_WORKERS,
+)
+
 
 @dataclass(frozen=True)
 class RuntimePreset:
@@ -10,18 +20,31 @@ class RuntimePreset:
     resolve_workers: int
     download_workers: int
     merge_workers: int
+    upload_workers: int
     resolve_rate_limit: int
     download_rate_limit: int
     queue_size: int
 
 
 PRESETS: dict[str, RuntimePreset] = {
+    "default": RuntimePreset(
+        name="default",
+        description="Default configuration, used when no preset is specified.",
+        resolve_workers=DEFAULT_RESOLVE_WORKERS,
+        download_workers=DEFAULT_DOWNLOAD_WORKERS,
+        merge_workers=DEFAULT_MERGE_WORKERS,
+        upload_workers=DEFAULT_UPLOAD_WORKERS,
+        resolve_rate_limit=DEFAULT_PROVIDER_RATE_LIMIT,
+        download_rate_limit=DEFAULT_DOWNLOAD_RATE_LIMIT,
+        queue_size=DEFAULT_QUEUE_SIZE,
+    ),
     "safe": RuntimePreset(
         name="safe",
         description="Near synchronous performance with maximum reliability for weak machines or flaky networks.",
         resolve_workers=1,
         download_workers=1,
         merge_workers=1,
+        upload_workers=1,
         resolve_rate_limit=1,
         download_rate_limit=1,
         queue_size=1,
@@ -32,6 +55,7 @@ PRESETS: dict[str, RuntimePreset] = {
         resolve_workers=2,
         download_workers=2,
         merge_workers=2,
+        upload_workers=2,
         resolve_rate_limit=5,
         download_rate_limit=5,
         queue_size=2,
@@ -42,6 +66,7 @@ PRESETS: dict[str, RuntimePreset] = {
         resolve_workers=4,
         download_workers=4,
         merge_workers=4,
+        upload_workers=4,
         resolve_rate_limit=10,
         download_rate_limit=20,
         queue_size=8,
@@ -76,6 +101,7 @@ def format_presets() -> str:
             f"resolve_workers={preset.resolve_workers}, "
             f"download_workers={preset.download_workers}, "
             f"merge_workers={preset.merge_workers}, "
+            f"upload_workers={preset.upload_workers}, "
             f"resolve_rate_limit={preset.resolve_rate_limit}, "
             f"download_rate_limit={preset.download_rate_limit}, "
             f"queue_size={preset.queue_size}"
